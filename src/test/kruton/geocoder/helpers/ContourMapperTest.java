@@ -181,7 +181,7 @@ public class ContourMapperTest {
 
 	@Test
 	public void CreateTestDataForPostGres() {
-		System.out.println("************ LocationArrayExpansionTest");
+		System.out.println("************ CreateTestDataForPostGres");
 		ContourHelper counterHelper = new ContourHelper(testLocations3);
 		counterHelper.sortLocations();
 

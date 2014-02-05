@@ -1,12 +1,5 @@
 package com.kruton.geocoder.utils;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import com.kruton.geocoder.beans.LocationBean;
-
 public class Debug {
 
 	public static enum LEVEL {

@@ -11,6 +11,10 @@ import com.kruton.geocoder.beans.LocationBean;
 import com.kruton.geocoder.utils.Debug;
 import com.kruton.geocoder.utils.Debug.LEVEL;
 
+
+/*
+ * The CountourHelper class contains various methods for modifying a weighted map.  
+ */
 public class ContourHelper {
 	List<LocationBean> locations = new ArrayList<LocationBean>();
 	
@@ -23,14 +27,10 @@ public class ContourHelper {
 		
 	}
 
-
-	public void sortLocations() {
-		Collections.sort(locations);
-	}
 	
 	
-	
-	/*
+	/****************************************************************************************
+	 ****************************************************************************************
 	 * Convenience methods
 	 */
 	public LocationBean[][] fillInArray(LocationBean[][] locationArray) {
@@ -38,14 +38,18 @@ public class ContourHelper {
 	}
 	
 	
-	
-	
-	
-	/*
+	/****************************************************************************************
+	 ****************************************************************************************
 	 * Action Methods
 	 */
 	
+	public void sortLocations() {
+		Collections.sort(locations);
+	}
 	
+	/*
+	 * Returns a hashmap containing a list of location points that all have the same weight
+	 */
 	public Map<Integer, List<LocationBean>> groupLocationsByWeight(LocationBean[][] locationArray) {
 		Map<Integer, List<LocationBean>> groupings = new HashMap<Integer, List<LocationBean>>();
 		int rows = locationArray[0].length;
@@ -79,10 +83,10 @@ public class ContourHelper {
 		return groupings;
 	}
 	
-	
-	
+	/*
+	 * Create a LocationBean 2D array from the locations private variable
+	 */
 	public LocationBean[][] createLocationArrayFromList(int rows, int cols) {
-		
 		LocationBean[][] locationArray = new LocationBean[cols][rows];
 		
 		int count = 0;
@@ -93,10 +97,20 @@ public class ContourHelper {
 				count++;
 			}
 		}
-		
 		return locationArray;
 	}
 	
+	/*
+	 * Expands the location array by adding an extra locationBean in between every other 2 locationBeans
+	 * 
+	 * Given a 2x2 array, this function will return an array of size 3x3.
+	 * 
+	 * Ex (x indicates a null value):
+	 * initial array:         New array: 
+	 *        1 2				1 x 2
+	 *        3 4				x x x
+	 *    						3 x 4
+	 */
 	public LocationBean[][] expandArray(LocationBean[][] initialLocationArray) {
 		int rows = initialLocationArray[0].length;
 		int cols = initialLocationArray.length;
@@ -126,7 +140,10 @@ public class ContourHelper {
 		return newLocationArray;
 	}
 	
-	
+	/*
+	 * Fills in the null values of a locationArray
+	 *   This method should be used after an array is expanded, and calls the methods firstPass and secondPass to fill in the data
+	 */
 	public LocationBean[][] fillInArray(LocationBean[][] locationArray, LEVEL debug) {
 		double xStep = 0.0;
 		double yStep = 0.0;
@@ -138,11 +155,9 @@ public class ContourHelper {
 		xStep = (lat2 - lat1) / 2;
 		yStep = (lon2 - lon1) / 2;
 		
-		System.out.println("Initial lats: " + lat1 + " " + lat2 + " | step = " + xStep);
-		System.out.println("Initial lons: " + lon1 + " " + lon2 + " | step = " + yStep);
-		
-		
-		
+		if (debug.getLevel() >= 3) System.out.println("Initial lats: " + lat1 + " " + lat2 + " | step = " + xStep);
+		if (debug.getLevel() >= 3) System.out.println("Initial lons: " + lon1 + " " + lon2 + " | step = " + yStep);
+
 		locationArray = firstPass(locationArray, debug);
 		
 		if (debug.getLevel() >= 2) System.out.println("After first pass");
@@ -153,6 +168,15 @@ public class ContourHelper {
 		return locationArray;
 	}
 	
+	/*
+	 * This method fills in all null values in the 2D array that are surrounded by other null values
+	 * 
+	 * Ex (x indicates a null value):
+	 * initial array:         New array: 
+	 *        1 x 2				1  x  2
+	 *        x x x				x 2.5 x
+	 *    	  3 x 4				3  x  4
+	 */
 	public LocationBean[][] firstPass(LocationBean[][] locationArray, LEVEL debug) {
 		int rows = locationArray[0].length;
 		int cols = locationArray.length;
@@ -189,11 +213,19 @@ public class ContourHelper {
 		return locationArray;
 	}
 
+	/*
+	 * This method fills in all null values in the 2D array that remain after the first pass
+	 * 
+	 * Ex (x indicates a null value):
+	 * initial array:         New array: 
+	 *        1  x  2         1 1.5 2
+	 *        x 2.5 x         2 2.5 3
+	 *    	  3  x  4   	  3 3.5 4
+	 */
 	public LocationBean[][] secondPass(LocationBean[][] locationArray, LEVEL debug, double lonStep, double latStep) {
 		int rows = locationArray[0].length;
 		int cols = locationArray.length;
 
-		
 		for(int x = 0; x < rows; x++) {
 			for(int y = 0; y < cols; y++) {
 				double sum = 0.0;
@@ -248,8 +280,8 @@ public class ContourHelper {
 	}
 
 	
-	
-	/*
+	/****************************************************************************************
+	 ****************************************************************************************
 	 * Getters, Setters, and Printers
 	 * 
 	 */

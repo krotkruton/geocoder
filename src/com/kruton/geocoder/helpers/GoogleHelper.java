@@ -20,10 +20,11 @@ import org.xml.sax.SAXException;
 
 import com.kruton.geocoder.beans.LocationBean;
 import com.kruton.geocoder.utils.BasicURLRequest;
+import com.kruton.geocoder.utils.Keys;
 
 public class GoogleHelper {
 	
-	String apiKey = "AIzaSyD9QUFaB9dTV4P_C-XJoY1KUf1pt9sPqR4";
+	String apiKey = (new Keys()).getGoogleKey();  //create Keys class as a quick way to hide the keys from github
 	String distanceMatrixUrl = "http://maps.googleapis.com/maps/api/distancematrix/xml";
 	String geocodeUrl = "https://maps.googleapis.com/maps/api/geocode/xml";
 	int timeout = 30000;

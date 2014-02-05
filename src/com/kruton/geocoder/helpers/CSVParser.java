@@ -10,6 +10,10 @@ import au.com.bytecode.opencsv.CSVWriter;
 
 import com.kruton.geocoder.beans.LocationBean;
 
+
+/*
+ * This class contains methods for reading and writing specific files.  They are generally not reusable.
+ */
 public class CSVParser {
 
 
